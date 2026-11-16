@@ -4,11 +4,20 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { signIn, signUp } from "@/lib/auth-client";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 
 type Mode = "login" | "signup";
-
-const inputClass =
-  "w-full rounded-lg border border-zinc-300 bg-transparent px-3 py-2 text-sm outline-none focus:border-zinc-900 dark:border-zinc-700 dark:focus:border-zinc-100";
 
 export function AuthForm({ mode }: { mode: Mode }) {
   const router = useRouter();
@@ -40,65 +49,70 @@ export function AuthForm({ mode }: { mode: Mode }) {
 
   return (
     <main className="flex flex-1 items-center justify-center px-4 py-16">
-      <form onSubmit={onSubmit} className="w-full max-w-sm space-y-4">
-        <h1 className="text-2xl font-semibold tracking-tight">
-          {isSignup ? "Créer un compte" : "Connexion"}
-        </h1>
-
-        {isSignup && (
-          <label className="block space-y-1 text-sm">
-            <span>Nom</span>
-            <input name="name" type="text" required autoComplete="name" className={inputClass} />
-          </label>
-        )}
-        <label className="block space-y-1 text-sm">
-          <span>Email</span>
-          <input name="email" type="email" required autoComplete="email" className={inputClass} />
-        </label>
-        <label className="block space-y-1 text-sm">
-          <span>Mot de passe</span>
-          <input
-            name="password"
-            type="password"
-            required
-            minLength={8}
-            autoComplete={isSignup ? "new-password" : "current-password"}
-            className={inputClass}
-          />
-        </label>
-
-        {error && (
-          <p role="alert" className="text-sm text-red-600">
-            {error}
-          </p>
-        )}
-
-        <button
-          type="submit"
-          disabled={pending}
-          className="w-full rounded-lg bg-zinc-900 px-3 py-2 text-sm font-medium text-white disabled:opacity-60 dark:bg-zinc-100 dark:text-zinc-900"
-        >
-          {pending ? "Chargement…" : isSignup ? "Créer le compte" : "Se connecter"}
-        </button>
-
-        <p className="text-center text-sm text-zinc-500">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle className="text-xl">
+            {isSignup ? "Créer un compte" : "Connexion"}
+          </CardTitle>
+          <CardDescription>
+            {isSignup
+              ? "Renseigne tes informations pour commencer."
+              : "Connecte-toi avec ton email et ton mot de passe."}
+          </CardDescription>
+        </CardHeader>
+        <form onSubmit={onSubmit}>
+          <CardContent>
+            <FieldGroup>
+              {isSignup && (
+                <Field>
+                  <FieldLabel htmlFor="name">Nom</FieldLabel>
+                  <Input id="name" name="name" type="text" required autoComplete="name" />
+                </Field>
+              )}
+              <Field>
+                <FieldLabel htmlFor="email">Email</FieldLabel>
+                <Input id="email" name="email" type="email" required autoComplete="email" />
+              </Field>
+              <Field>
+                <FieldLabel htmlFor="password">Mot de passe</FieldLabel>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  minLength={8}
+                  autoComplete={isSignup ? "new-password" : "current-password"}
+                />
+              </Field>
+              {error && (
+                <Alert variant="destructive">
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+              <Button type="submit" disabled={pending} className="w-full">
+                {pending ? "Chargement…" : isSignup ? "Créer le compte" : "Se connecter"}
+              </Button>
+            </FieldGroup>
+          </CardContent>
+        </form>
+        <CardFooter className="justify-center text-sm text-muted-foreground">
           {isSignup ? (
             <>
-              Déjà un compte ?{" "}
+              Déjà un compte ?&nbsp;
               <Link href="/login" className="underline">
                 Se connecter
               </Link>
             </>
           ) : (
             <>
-              Pas encore de compte ?{" "}
+              Pas encore de compte ?&nbsp;
               <Link href="/signup" className="underline">
                 Créer un compte
               </Link>
             </>
           )}
-        </p>
-      </form>
+        </CardFooter>
+      </Card>
     </main>
   );
 }

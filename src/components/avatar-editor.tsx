@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Avatar, AvatarPicker } from "glyph-avatar/react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 
 export function AvatarEditor({
@@ -40,9 +42,9 @@ export function AvatarEditor({
           onCancel={() => setEditing(false)}
         />
         {error && (
-          <p role="alert" className="text-sm text-red-600">
-            {error}
-          </p>
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
         )}
       </div>
     );
@@ -51,13 +53,9 @@ export function AvatarEditor({
   return (
     <div className="flex flex-col items-center gap-3">
       <Avatar value={value} size={96} alt={name} />
-      <button
-        type="button"
-        onClick={() => setEditing(true)}
-        className="rounded-lg border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700"
-      >
+      <Button type="button" variant="outline" onClick={() => setEditing(true)}>
         Changer d&apos;avatar
-      </button>
+      </Button>
     </div>
   );
 }
