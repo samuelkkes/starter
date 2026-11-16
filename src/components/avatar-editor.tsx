@@ -40,6 +40,7 @@ export function AvatarEditor({
           defaultValue={value}
           onSave={save}
           onCancel={() => setEditing(false)}
+          className="[--ga-panel:var(--card)]! [--ga-ink:var(--foreground)]! [--ga-muted:var(--muted-foreground)]! [--ga-accent:var(--primary)]! [--ga-accent-ink:var(--primary-foreground)]!"
         />
         {error && (
           <Alert variant="destructive">
