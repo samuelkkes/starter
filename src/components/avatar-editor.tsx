@@ -2,9 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { PencilEdit01Icon } from "@hugeicons/core-free-icons";
 import { Avatar, AvatarPicker } from "glyph-avatar/react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -46,12 +47,16 @@ export function AvatarEditor({
   }
 
   return (
-    <div className="flex flex-col items-center gap-3">
-      <Avatar value={value} size={96} alt={name} />
-      <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogTrigger render={<Button type="button" variant="outline" />}>
-          Changer d&apos;avatar
-        </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogTrigger
+        aria-label="Modifier l'avatar"
+        className="group/avatar relative flex size-16 shrink-0 cursor-pointer overflow-hidden rounded-full outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+      >
+        <Avatar value={value} size={64} alt={name} className="[&_svg]:size-full!" />
+        <span className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 text-white opacity-0 transition-opacity group-hover/avatar:opacity-100 group-focus-visible/avatar:opacity-100">
+          <HugeiconsIcon icon={PencilEdit01Icon} className="size-5" />
+        </span>
+      </DialogTrigger>
         <DialogContent showCloseButton={false} className="gap-0 overflow-hidden p-0 sm:max-w-lg">
           <DialogTitle className="sr-only">Choisir un avatar</DialogTitle>
           <DialogDescription className="sr-only">
@@ -73,7 +78,6 @@ export function AvatarEditor({
             </Alert>
           )}
         </DialogContent>
-      </Dialog>
-    </div>
+    </Dialog>
   );
 }
