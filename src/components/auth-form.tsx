@@ -34,13 +34,24 @@ export function AuthForm({ mode }: { mode: Mode }) {
     const email = String(form.get("email"));
     const password = String(form.get("password"));
 
+    let retryAfter: string | null = null;
+    const fetchOptions = {
+      onError: ({ response }: { response: Response }) => {
+        if (response.status === 429) retryAfter = response.headers.get("X-Retry-After");
+      },
+    };
+
     const { error } = isSignup
-      ? await signUp.email({ name: String(form.get("name")), email, password })
-      : await signIn.email({ email, password });
+      ? await signUp.email({ name: String(form.get("name")), email, password, fetchOptions })
+      : await signIn.email({ email, password, fetchOptions });
 
     setPending(false);
     if (error) {
-      setError(error.message ?? "Une erreur est survenue");
+      setError(
+        error.status === 429
+          ? `Trop de tentatives. Réessaie ${retryAfter ? `dans ${retryAfter} secondes` : "dans quelques instants"}.`
+          : (error.message ?? "Une erreur est survenue"),
+      );
       return;
     }
     router.push("/");

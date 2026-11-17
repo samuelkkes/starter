@@ -10,12 +10,27 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+  // Production note: the limiter counts requests per client IP, read from
+  // X-Forwarded-For by default, which clients can spoof. Behind a proxy or
+  // host, set advanced.ipAddress.ipAddressHeaders to the header your proxy
+  // overwrites (e.g. ["cf-connecting-ip"]). Without a trusted client IP the
+  // limits are easy to bypass.
+  rateLimit: {
+    enabled: true, // also on in development (off by default there)
+    storage: "database", // counters persisted in PostgreSQL (rateLimit table)
+    window: 10, // seconds
+    max: 100, // requests per window
+    customRules: {
+      // /sign-in/email is already limited by default to 3 requests / 10 s
+      "/sign-up/email": { window: 60, max: 5 },
+    },
+  },
   plugins: [
     i18n({
       translations: locales,
       defaultLocale: "fr",
       detection: ["cookie", "header"],
     }),
-    nextCookies(), // doit rester le dernier plugin
+    nextCookies(), // must stay the last plugin
   ],
 });

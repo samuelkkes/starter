@@ -16,7 +16,7 @@ export function ThemeToggle() {
       aria-label="Changer de thème"
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
     >
-      {/* Les deux icônes sont rendues, le CSS choisit laquelle afficher (évite l'écart d'hydratation) */}
+      {/* Both icons are rendered and CSS picks one, which avoids a hydration mismatch */}
       <HugeiconsIcon icon={Sun03Icon} className="dark:hidden" />
       <HugeiconsIcon icon={Moon02Icon} className="hidden dark:block" />
     </Button>

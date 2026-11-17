@@ -62,7 +62,7 @@ export function AvatarEditor({
           <DialogDescription className="sr-only">
             Fais glisser pour explorer, puis choisis l&apos;avatar qui te plaît.
           </DialogDescription>
-          {/* Le picker se remonte à chaque ouverture : defaultValue est relu à chaque fois */}
+          {/* The picker remounts on every open, so defaultValue is re-read each time */}
           <AvatarPicker
             title="Choisir un avatar"
             description="Fais glisser pour explorer, puis choisis celui qui te plaît."
